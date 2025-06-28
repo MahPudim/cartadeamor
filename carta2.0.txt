@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Romantic Envelope 💌</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      background: #ffe9f1;
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+    }
+
+    canvas {
+      display: block;
+      margin: auto;
+    }
+
+    .btn {
+      background-color: #f28ca1;
+      color: white;
+      border: none;
+      padding: 14px 24px;
+      font-size: 1rem;
+      border-radius: 12px;
+      margin: 10px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background-color: #f472b6;
+    }
+
+    .controls {
+      position: relative;
+      margin-top: 10px;
+    }
+
+    audio {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div id="sketch-holder"></div>
+    <div class="controls">
+      <button class="btn" onclick="openEnvelope()">💌 Abrir Envelope</button>
+      <button class="btn" onclick="closeEnvelope()">❌ Fechar Envelope</button>
+    </div>
+    <audio id="romantic-audio" src="romantic.mp3"></audio>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+  <script>
+    let envelopeOpen = false;
+    let letterY;
+    let audio;
+
+    function setup() {
+      let cnv = createCanvas(windowWidth, 400);
+      cnv.parent('sketch-holder');
+      letterY = height / 2 + 30;
+      audio = document.getElementById("romantic-audio");
+    }
+
+    function draw() {
+      background('#ffe9f1');
+      drawEnvelope();
+
+      if (envelopeOpen && letterY > height / 2 - 80) {
+        letterY -= 2;
+      } else if (!envelopeOpen && letterY < height / 2 + 30) {
+        letterY += 2;
+      }
+
+      drawLetter();
+    }
+
+    function drawEnvelope() {
+      const centerX = width / 2;
+      const centerY = height / 2;
+
+      fill('#f87171');
+      noStroke();
+      triangle(centerX - 100, centerY, centerX + 100, centerY, centerX, centerY + 100);
+
+      fill('#fb7185');
+      triangle(centerX - 100, centerY, centerX, centerY - 40, centerX, centerY);
+      triangle(centerX + 100, centerY, centerX, centerY - 40, centerX, centerY);
+
+      fill('#fca5a5');
+      triangle(centerX - 100, centerY, centerX + 100, centerY, centerX, centerY - 100);
+    }
+
+    function drawLetter() {
+      fill(255);
+      rect(width / 2 - 60, letterY, 120, 80, 10);
+      fill('#d946ef');
+      textAlign(CENTER, CENTER);
+      textSize(16);
+      textStyle(ITALIC);
+      text('I love you,\nmost ardently', width / 2, letterY + 40);
+    }
+
+    function openEnvelope() {
+      envelopeOpen = true;
+      audio.play();
+    }
+
+    function closeEnvelope() {
+      envelopeOpen = false;
+      audio.pause();
+      audio.currentTime = 0;
+    }
+
+    function windowResized() {
+      resizeCanvas(windowWidth, 400);
+    }
+  </script>
+</body>
+</html>
